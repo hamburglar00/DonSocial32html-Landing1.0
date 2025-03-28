@@ -1,0 +1,91 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+}
+
+body {
+  background-color: #071d04;
+}
+
+h1 {
+  padding: 20px;
+}
+
+.background-image {
+  background-image: url("imagenes/fondo.png");
+  background-size: auto 100%;
+  background-repeat: repeat-x;
+  background-position: top center;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.content {
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  width: 250px;
+  height: 250px;
+}
+
+.title {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.whatsapp-button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #103928;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  padding: 20px;
+  border: solid 3px #fff;
+  border-radius: 10px;
+  text-decoration: none;
+  margin-top: 25px;
+  gap: 10px;
+  min-width: 250px;
+  box-shadow: 5px 5px 40px #000;
+}
+
+.whatsapp-icon {
+  height: 30px;
+}
+
+.subtitle {
+  font-size: 22px;
+  margin-top: 40px;
+  color: white;
+}
+
+.description {
+  color: #b0b0b0;
+  font-size: 14px;
+  font-style: italic;
+  margin-top: 35px;
+  margin-bottom: 50px;
+}
