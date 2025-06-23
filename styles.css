@@ -54,6 +54,8 @@ h1 {
 }
 
 .whatsapp-button {
+  position: relative;
+  overflow: hidden;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -70,11 +72,34 @@ h1 {
   gap: 10px;
   min-width: 250px;
   box-shadow:
-    0 0 30px 8px gold,                 /* sombra dorada exterior */
+    0 0 30px 8px gold,
     inset 0 1px 0 #ffffff33,
     0 0 12px 2px #10392899;
   animation: heartbeat 2s infinite ease-in-out;
   transition: all 0.3s ease-in-out;
+}
+
+/* Brillo animado */
+.whatsapp-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+  transform: skewX(-25deg);
+  animation: shine 3s infinite;
+  pointer-events: none;
+}
+
+@keyframes shine {
+  0% {
+    left: -75%;
+  }
+  100% {
+    left: 125%;
+  }
 }
 
 @keyframes heartbeat {
