@@ -44,19 +44,18 @@ src="https://www.facebook.com/tr?id=1331346178170338&ev=PageView&noscript=1"
         <p class="description">-RED OFICIAL: DON SOCIAL 32-</p>
       </div>
     </div>
-    <script>
-      document
-        .getElementById("whatsappButton")
-        .addEventListener("click", function () {
-          var telefono = "5493513956445";
-          var mensaje = "Hola! Vi este anuncio, quisiera un nuevo usuario.";
-          var link =
-            "https://wa.me/" +
-            telefono +
-            "?text=" +
-            encodeURIComponent(mensaje);
+      <script>
+        document.getElementById("whatsappButton").addEventListener("click", function () {
+          const numeros = [
+            "5493513956445",
+            "5493513956445",
+            "5491131241084"
+          ];
+          const telefono = numeros[Math.floor(Math.random() * numeros.length)];
+          const mensaje = "Hola! Vi este anuncio, quisiera un nuevo usuario.";
+          const link = "https://wa.me/" + telefono + "?text=" + encodeURIComponent(mensaje);
           window.open(link, "_blank");
         });
-    </script>
+      </script>
   </body>
 </html>
