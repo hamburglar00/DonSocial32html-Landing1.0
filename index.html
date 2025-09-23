@@ -25,22 +25,14 @@ src="https://www.facebook.com/tr?id=1744862249493660&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
     
-   </head>
+  </head>
   <body>
     <div class="container background-image">
       <div class="overlay"></div>
       <div class="content">
         <img src="imagenes/logo.PNG" class="logo" />
         <p class="title">Envianos un WhatsApp<br />para crear tu cuenta</p>
-
-        <!-- Botón WhatsApp con href inicial -->
-        <a
-          class="whatsapp-button"
-          id="whatsappButton"
-          href="https://wa.me/5493517306539?text=Hola%21%20Vi%20este%20anuncio%2C%20quisiera%20un%20nuevo%20usuario."
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a class="whatsapp-button" id="whatsappButton">
           <span>¡Contactá ya!</span>
           <img
             src="imagenes/whatsapp.png"
@@ -48,38 +40,28 @@ src="https://www.facebook.com/tr?id=1744862249493660&ev=PageView&noscript=1"
             class="whatsapp-icon"
           />
         </a>
-
         <p class="subtitle">Sín Límite de retiro<br />Sín Cronogramas<br />Ganás y cobrás a cualquier hora</p>
         <p class="description">-RED OFICIAL: DON SOCIAL 32-</p>
       </div>
     </div>
-
-    <script>
-      // Números posibles para WhatsApp
-      const numeros = [
-        "5493517306539", // Macarena
-        "5493517304066", // Florencia
-        "5493518570547"  // Julieta
-      ];
-      const mensaje = "Hola! Vi este anuncio, quisiera un nuevo usuario.";
-
-      const $cta = document.getElementById("whatsappButton");
-
-      // Función para elegir número aleatorio y actualizar href
-      function setRandomHref() {
-        const tel = numeros[Math.floor(Math.random() * numeros.length)];
-        const link = "https://wa.me/" + tel + "?text=" + encodeURIComponent(mensaje);
-        $cta.setAttribute("href", link);
-      }
-
-      // Seteamos al cargar la página
-      setRandomHref();
-
-      // Al clic, disparamos evento Contact y refrescamos número
-      $cta.addEventListener("click", () => {
-        setRandomHref(); // opcional: cambia número en cada clic
-        fbq && fbq("track", "Contact");
-      });
-    </script>
+      <script>
+        document.getElementById("whatsappButton").addEventListener("click", function () {
+          const numeros = [
+            //"5493518150555", //Geraldina
+            "5493517306539", //Macarena
+            "5493517304066", //Florencia
+            //"5493513802174", //Olivia
+            //"5493517306544", //Pamela
+            //"5493517306543", //Laura
+            //"5493513831803", //Martina
+            //"5493513956445", //Martina
+            "5493518570547"  //Julieta
+          ];
+          const telefono = numeros[Math.floor(Math.random() * numeros.length)];
+          const mensaje = "Hola! Vi este anuncio, quisiera un nuevo usuario.";
+          const link = "https://wa.me/" + telefono + "?text=" + encodeURIComponent(mensaje);
+          window.open(link, "_blank");
+        });
+      </script>
   </body>
 </html>
