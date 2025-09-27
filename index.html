@@ -99,7 +99,7 @@
         const utm = normalizeUtm(getUTMCampaign());
         const codigo = `${LANDING_PREFIX}-${utm}`;
 
-        const mensaje = `Hola! Vi este anuncio, quisiera un nuevo usuario.${codigo}`;
+        const mensaje = `Hola! Vi este anuncio, quisiera un nuevo usuario. ${codigo}`;
         const link = "https://wa.me/" + telefono + "?text=" + encodeURIComponent(mensaje);
 
         window.open(link, "_blank", "noopener");
