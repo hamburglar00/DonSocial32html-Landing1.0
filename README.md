@@ -1,0 +1,62 @@
+A continuacion, el HTML más sencillo, el primero de todos, sin utm_campaign:
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DON SOCIAL</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./styles.css" />
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1744862249493660');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1744862249493660&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+    
+  </head>
+  <body>
+    <div class="container background-image">
+      <div class="overlay"></div>
+      <div class="content">
+        <img src="imagenes/logo.PNG" class="logo" />
+        <p class="title">Envianos un WhatsApp<br />para crear tu cuenta</p>
+        <a class="whatsapp-button" id="whatsappButton">
+          <span>¡Contactá ya!</span>
+          <img
+            src="imagenes/whatsapp.png"
+            alt="whatsapp"
+            class="whatsapp-icon"
+          />
+        </a>
+        <p class="subtitle">Sín Límite de retiro<br />Sín Cronogramas<br />Ganás y cobrás a cualquier hora</p>
+        <p class="description">-RED OFICIAL: DON SOCIAL 32-</p>
+      </div>
+    </div>
+      <script>
+        document.getElementById("whatsappButton").addEventListener("click", function () {
+          const numeros = [
+            "5493518184999", // Juana
+            "5493515129415"  // Juana
+          ];
+          const telefono = numeros[Math.floor(Math.random() * numeros.length)];
+          const mensaje = "Hola! Vi este anuncio, quisiera un nuevo usuario.";
+          const link = "https://wa.me/" + telefono + "?text=" + encodeURIComponent(mensaje);
+          window.open(link, "_blank");
+        });
+      </script>
+  </body>
+</html>
