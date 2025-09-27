@@ -58,7 +58,7 @@
     <!-- Script WhatsApp con utm_campaign -> "Prefijo-UTM" -->
     <script>
       // === Configurá tu prefijo acá ===
-      const LANDING_PREFIX = "DON-SOCIAL-32"; // Cambiá si querés otro prefijo
+      const LANDING_PREFIX = "DS1.0"; // Cambiá si querés otro prefijo
 
       // Lee un parámetro de la URL (?utm_campaign=...)
       function getQueryParam(name) {
@@ -73,7 +73,7 @@
           .trim()
           .replace(/\s+/g, "_")          // espacios -> _
           .replace(/[^A-Za-z0-9_-]/g, "") // quita símbolos raros
-          || "ORGANICO";
+          || "ORG";
       }
 
       // Persistimos utm_campaign si viene en la URL
