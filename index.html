@@ -14,24 +14,55 @@
     <!-- Performance: precarga imagen de fondo del hero (cambiá el href si tu archivo es otro) -->
     <link rel="preload" as="image" href="imagenes/fondo.png" />
 
-    <!-- Meta Pixel Code -->
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1744862249493660');
-      fbq('track', 'PageView');
-    </script>
-    <noscript>
-      <img height="1" width="1" style="display:none"
-           src="https://www.facebook.com/tr?id=1744862249493660&ev=PageView&noscript=1" />
-    </noscript>
-    <!-- End Meta Pixel Code -->
+    <!-- Meta Pixel Code (con coincidencias avanzadas manuales) -->
+    <!-- Meta Pixel Code (con coincidencias avanzadas manuales) -->
+<script>
+  // Utilidades
+  function getQS(name){ const u=new URLSearchParams(location.search); return u.get(name)||null }
+  function normEmail(v){ return (v||"").trim().toLowerCase() }
+  function normPhone(v){
+    // deja solo dígitos; si es AR agrega 54 si faltara
+    let p=(v||"").replace(/\D+/g,"");
+    if(p && p.length===10) p="54"+p; // opcional, ajustá a tu necesidad
+    return p;
+  }
+  function getOrCreateExternalId(){
+    const k="external_id";
+    let id=localStorage.getItem(k);
+    if(!id){
+      id=(crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now()+"-"+Math.random().toString(16).slice(2));
+      localStorage.setItem(k,id);
+    }
+    return id;
+  }
+
+  // Datos de usuario disponibles (querystring o localStorage)
+  const userEmail  = normEmail( getQS("em") || localStorage.getItem("em") || "" );
+  const userPhone  = normPhone( getQS("ph") || localStorage.getItem("ph") || "" );
+  const externalId = getOrCreateExternalId();
+
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+
+  // ⬇️ ACTIVÁS COINCIDENCIAS AVANZADAS ACÁ (tercer parámetro)
+  fbq('init', '1744862249493660', {
+    external_id: externalId,        // siempre
+    em: userEmail || undefined,     // opcional si tenés email
+    ph: userPhone || undefined,     // opcional si tenés teléfono
+    country: 'AR'                   // opcional
+  });
+
+  fbq('track', 'PageView');
+</script>
+<noscript>
+  <img height="1" width="1" style="display:none"
+       src="https://www.facebook.com/tr?id=1744862249493660&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Meta Pixel Code -->
+    
   </head>
 
   <body>
