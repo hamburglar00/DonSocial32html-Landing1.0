@@ -15,7 +15,6 @@
     <link rel="preload" as="image" href="imagenes/fondo.png" />
 
     <!-- Meta Pixel Code (con coincidencias avanzadas manuales) -->
-    <!-- Meta Pixel Code (con coincidencias avanzadas manuales) -->
 <script>
   // Utilidades
   function getQS(name){ const u=new URLSearchParams(location.search); return u.get(name)||null }
@@ -130,8 +129,33 @@
         const utm = normalizeUtm(getUTMCampaign());
         const codigo = `${LANDING_PREFIX}-${utm}`;
 
-        const mensaje = `Hola! Vi este anuncio me pasas info.. ${codigo}`;
-        const link = "https://wa.me/" + telefono + "?text=" + encodeURIComponent(mensaje);
+        const variantes = [
+            `¡Hola! Vi este anuncio, ¿me pasás info? ${codigo}`,
+            `Hola! Vi el anuncio, ¿podés darme más info? ${codigo}`,
+            `Buenas! Me contás un poco más del anuncio? ${codigo}`,
+            `Hola! Quisiera saber más sobre lo que ofrecen. ${codigo}`,
+            `Buenas! ¿Me das más detalles, por favor? ${codigo}`,
+            `Hola! Estoy interesado, ¿cómo funciona? ${codigo}`,
+            `Hola! Vi tu publicación, ¿podrías ampliarme la info? ${codigo}`,
+            `Buenas! ¿Me podrías pasar información? ${codigo}`,
+            `Hola! Estoy viendo el anuncio, ¿me das más datos? ${codigo}`,
+            `Buenas! Me interesa, ¿podrías contarme más? ${codigo}`,
+            `Hola! ¿Cómo hago para empezar? ${codigo}`,
+            `Buenas! ¿Me compartís info para sumarme? ${codigo}`,
+            `Hola! ¿Tenés más detalles del anuncio? ${codigo}`,
+            `Buenas! Quiero más info, gracias. ${codigo}`,
+            `Hola! Me interesa, ¿me explicás un poco? ${codigo}`,
+            `Buenas! ¿Qué pasos tengo que seguir? ${codigo}`,
+            `Hola! Vi el aviso, ¿me das info? ${codigo}`,
+            `Buenas! Estoy interesado/a, ¿me pasás detalles? ${codigo}`,
+            `Hola! ¿Me contás de qué se trata? ${codigo}`,
+            `Buenas! Quiero saber más, ¿me ayudás? ${codigo}`
+          ];
+          
+        // Elegir una al azar y armar el link:
+        const mensaje = variantes[Math.floor(Math.random() * variantes.length)];
+        const link = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+
 
         window.open(link, "_blank", "noopener");
       });
