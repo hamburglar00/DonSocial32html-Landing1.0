@@ -14,7 +14,9 @@ h1 {
 }
 
 .background-image {
+  /* fallback (por si algún navegador no soporta avif) */
   background-image: url("imagenes/fondo.png");
+
   background-size: auto 100%;
   background-repeat: repeat-x;
   background-position: top center;
@@ -25,6 +27,14 @@ h1 {
   justify-content: center;
   position: relative;
 }
+
+/* Si soporta AVIF, usa el .avif */
+@supports (background-image: url("imagenes/fondo.avif")) {
+  .background-image {
+    background-image: url("imagenes/fondo.avif");
+  }
+}
+
 
 .overlay {
   position: absolute;
