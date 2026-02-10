@@ -27,7 +27,7 @@ const CONFIG = {
       agencies: [
         { id: 8, name: "Diana", weight: 40 },
 
-        // ✅ Geraldina: 40% API (id=17) + 60% estáticos
+        // ✅ Geraldina: 30% API (id=17) + 70% estáticos
         { id: 17, name: "Geraldina", weight: 60,
           allocation: {
             api_weight: 30,
