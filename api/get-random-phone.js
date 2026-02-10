@@ -1,8 +1,9 @@
 // /api/get-random-phone.js
 // ✅ Elige base URL por % (weighted routing)
 // ✅ Elige agency_id por % (weighted routing)
-// ✅ Si cae en Geraldina (id=17): 40% API, 60% estáticos (con % internos)
+// ✅ Si cae en Geraldina (id=17): 30% API, 70% estáticos (con % internos)
 // ✅ Devuelve 1 número listo para usar en wa.me
+// ✅ Devuelve landing_tag según rama (Diana/Geraldina/Foxy)
 // ✅ Plan A/B/C/D (retries + cache last good + fallback soporte)
 
 const CONFIG = {
@@ -25,16 +26,18 @@ const CONFIG = {
       base: "https://api.asesadmin.com/api/v1",
       weight: 70,
       agencies: [
-        { id: 8, name: "Diana", weight: 40 },
+        { id: 8, name: "Diana", weight: 40, landing_tag: "DIA" },
 
         // ✅ Geraldina: 30% API (id=17) + 70% estáticos
-        { id: 17, name: "Geraldina", weight: 60,
-          allocation: {
-            api_weight: 30,
-            static_weight: 70,
-          },
+        {
+          id: 17,
+          name: "Geraldina",
+          weight: 60,
+          landing_tag: "GER",
 
-          // 👇 Tus 6 números estáticos con sus % (weights relativos)
+          allocation: { api_weight: 30, static_weight: 70 },
+
+          // 👇 6 números estáticos con sus % (weights relativos)
           static_numbers: [
             { number: "5493562548623", weight: 10 }, // ania
             { number: "5493562551239", weight: 10 }, // Barquito
@@ -50,7 +53,7 @@ const CONFIG = {
       key: "foxy",
       base: "https://api.foxyadminbot.info/api/v1",
       weight: 30,
-      agencies: [{ id: 1, name: "Foxy", weight: 100 }],
+      agencies: [{ id: 1, name: "Foxy", weight: 100, landing_tag: "FOXY" }],
     },
   ],
 };
@@ -152,12 +155,17 @@ export default async function handler(req, res) {
       const idNum = Number(forcedAgencyId);
       if (!Number.isFinite(idNum)) throw new Error(`agency_id inválido`);
       agency =
-        upstream.agencies.find((a) => a.id === idNum) ||
-        { id: idNum, name: `agency_${idNum}` };
+        upstream.agencies.find((a) => a.id === idNum) || {
+          id: idNum,
+          name: `agency_${idNum}`,
+          landing_tag: "",
+        };
     } else {
       agency = pickWeighted(upstream.agencies);
       if (!agency?.id) throw new Error("No hay agencies configuradas");
     }
+
+    const landing_tag = String(agency?.landing_tag || "").trim();
 
     /**************************************************************
      * 2.5) Si agency tiene “allocation” => decidir API vs STATIC
@@ -176,12 +184,12 @@ export default async function handler(req, res) {
       // ✅ STATIC PATH
       if (route?.type === "static") {
         const chosenStatic = pickWeighted(agency.static_numbers || []);
-          if (!chosenStatic?.number) throw new Error("STATIC seleccionado pero no hay números válidos");
+        if (!chosenStatic?.number)
+          throw new Error("STATIC seleccionado pero no hay números válidos");
 
         const phone = normalizePhone(chosenStatic.number);
         if (!phone) throw new Error("Número estático inválido");
 
-        // cache last good
         LAST_GOOD_NUMBER = phone;
         LAST_GOOD_META = {
           route: "static",
@@ -189,6 +197,7 @@ export default async function handler(req, res) {
           upstream_base: upstream.base,
           agency_id: agency.id,
           agency_name: agency.name || "",
+          landing_tag,
           chosen_from: "static",
           static_weight: chosenStatic.weight,
           ts: new Date().toISOString(),
@@ -201,13 +210,13 @@ export default async function handler(req, res) {
           upstream_base: upstream.base,
           agency_id: agency.id,
           agency_name: agency.name || "",
+          landing_tag,
           chosen_from: "static",
           allocation: agency.allocation,
           ms: Date.now() - startedAt,
         });
       }
-
-      // Si no fue static, cae al flujo normal (API) abajo.
+      // si no fue static, cae a API abajo
     }
 
     /**************************************************************
@@ -272,9 +281,6 @@ export default async function handler(req, res) {
     const phone = normalizePhone(rawPhone);
     if (!phone) throw new Error("Número inválido");
 
-    /**************************************************************
-     * 6) Cache último bueno
-     **************************************************************/
     LAST_GOOD_NUMBER = phone;
     LAST_GOOD_META = {
       route: hasAllocation ? "api (allocation)" : "api",
@@ -282,6 +288,7 @@ export default async function handler(req, res) {
       upstream_base: upstream.base,
       agency_id: agency.id,
       agency_name: agency.name || "",
+      landing_tag,
       source: chosenSource,
       only_ads: CONFIG.ONLY_ADS_WHATSAPP,
       ts: new Date().toISOString(),
@@ -298,6 +305,7 @@ export default async function handler(req, res) {
       upstream_base: upstream.base,
       agency_id: agency.id,
       agency_name: agency.name || "",
+      landing_tag,
       chosen_from: chosenSource,
       only_ads: CONFIG.ONLY_ADS_WHATSAPP,
       allocation: hasAllocation ? agency.allocation : null,
