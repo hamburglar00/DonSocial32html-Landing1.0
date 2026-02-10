@@ -175,8 +175,8 @@ export default async function handler(req, res) {
 
       // ✅ STATIC PATH
       if (route?.type === "static") {
-        const chosenStatic = pickWeighted(agency.static_numbers);
-        if (!chosenStatic?.number) throw new Error("STATIC seleccionado pero no hay números");
+        const chosenStatic = pickWeighted(agency.static_numbers || []);
+          if (!chosenStatic?.number) throw new Error("STATIC seleccionado pero no hay números válidos");
 
         const phone = normalizePhone(chosenStatic.number);
         if (!phone) throw new Error("Número estático inválido");
