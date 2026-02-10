@@ -28,10 +28,7 @@ const CONFIG = {
         { id: 8, name: "Diana", weight: 40 },
 
         // ✅ Geraldina: 40% API (id=17) + 60% estáticos
-        {
-          id: 17, name: "Geraldina", weight: 60,
-
-          // 40% API / 60% estáticos
+        { id: 17, name: "Geraldina", weight: 60,
           allocation: {
             api_weight: 30,
             static_weight: 70,
@@ -44,7 +41,7 @@ const CONFIG = {
             { number: "5493516565147", weight: 10 }, // TV
             { number: "5493518625849", weight: 17 }, // Cunia
             { number: "5493562517984", weight: 16 }, // Niko
-            { number: "5493516766380", weight: 7 }, // Millo
+            { number: "5493516766380", weight: 7 },  // Millo
           ],
         },
       ],
