@@ -24,8 +24,8 @@ const CONFIG = {
       base: "https://api.asesadmin.com/api/v1",
       weight: 70,
       agencies: [
-        { id: 28, name: "Ceti", weight: 100 },
-        // { id: 17, name: "Geraldina", weight: 50 },
+        { id: 8, name: "Diana", weight: 40 },
+        { id: 17, name: "Geraldina", weight: 60 },
       ],
     },
     {
@@ -33,7 +33,7 @@ const CONFIG = {
       base: "https://api.foxyadminbot.info/api/v1",
       weight: 30,
       agencies: [
-        { id: 28, name: "Ceti", weight: 100 },
+        { id: 1, name: "Foxy", weight: 100 },
       ],
     },
   ],
