@@ -1,6 +1,7 @@
 // /api/get-random-phone.js
 // ✅ Elige base URL por % (weighted routing)
 // ✅ Elige agency_id por % (weighted routing)
+// ✅ Si cae en Geraldina (id=17): 40% API, 60% estáticos (con % internos)
 // ✅ Devuelve 1 número listo para usar en wa.me
 // ✅ Plan A/B/C/D (retries + cache last good + fallback soporte)
 
@@ -25,16 +26,34 @@ const CONFIG = {
       weight: 70,
       agencies: [
         { id: 8, name: "Diana", weight: 40 },
-        { id: 17, name: "Geraldina", weight: 60 },
+
+        // ✅ Geraldina: 40% API (id=17) + 60% estáticos
+        {
+          id: 17, name: "Geraldina", weight: 60,
+
+          // 40% API / 60% estáticos
+          allocation: {
+            api_weight: 30,
+            static_weight: 70,
+          },
+
+          // 👇 Tus 6 números estáticos con sus % (weights relativos)
+          static_numbers: [
+            { number: "5493562548623", weight: 10 }, // ania
+            { number: "5493562551239", weight: 10 }, // Barquito
+            { number: "5493516565147", weight: 10 }, // TV
+            { number: "5493518625849", weight: 17 }, // Cunia
+            { number: "5493562517984", weight: 16 }, // Niko
+            { number: "5493516766380", weight: 7 }, // Millo
+          ],
+        },
       ],
     },
     {
       key: "foxy",
       base: "https://api.foxyadminbot.info/api/v1",
       weight: 30,
-      agencies: [
-        { id: 1, name: "Foxy", weight: 100 },
-      ],
+      agencies: [{ id: 1, name: "Foxy", weight: 100 }],
     },
   ],
 };
@@ -144,7 +163,58 @@ export default async function handler(req, res) {
     }
 
     /**************************************************************
-     * 3) Construir URL final
+     * 2.5) Si agency tiene “allocation” => decidir API vs STATIC
+     **************************************************************/
+    const hasAllocation =
+      agency?.allocation &&
+      Number(agency.allocation.api_weight ?? 0) > 0 &&
+      Number(agency.allocation.static_weight ?? 0) > 0;
+
+    if (hasAllocation) {
+      const route = pickWeighted([
+        { type: "api", weight: Number(agency.allocation.api_weight) },
+        { type: "static", weight: Number(agency.allocation.static_weight) },
+      ]);
+
+      // ✅ STATIC PATH
+      if (route?.type === "static") {
+        const chosenStatic = pickWeighted(agency.static_numbers);
+        if (!chosenStatic?.number) throw new Error("STATIC seleccionado pero no hay números");
+
+        const phone = normalizePhone(chosenStatic.number);
+        if (!phone) throw new Error("Número estático inválido");
+
+        // cache last good
+        LAST_GOOD_NUMBER = phone;
+        LAST_GOOD_META = {
+          route: "static",
+          upstream_key: upstream.key,
+          upstream_base: upstream.base,
+          agency_id: agency.id,
+          agency_name: agency.name || "",
+          chosen_from: "static",
+          static_weight: chosenStatic.weight,
+          ts: new Date().toISOString(),
+        };
+
+        return res.status(200).json({
+          number: phone,
+          mode,
+          upstream_key: upstream.key,
+          upstream_base: upstream.base,
+          agency_id: agency.id,
+          agency_name: agency.name || "",
+          chosen_from: "static",
+          allocation: agency.allocation,
+          ms: Date.now() - startedAt,
+        });
+      }
+
+      // Si no fue static, cae al flujo normal (API) abajo.
+    }
+
+    /**************************************************************
+     * 3) Construir URL final (API path)
      **************************************************************/
     const API_URL = `${upstream.base}/agency/${agency.id}/random-contact`;
 
@@ -175,12 +245,10 @@ export default async function handler(req, res) {
       }
     }
 
-    if (!data) {
-      throw new Error(`Upstream fail: ${upstreamMeta.last_error}`);
-    }
+    if (!data) throw new Error(`Upstream fail: ${upstreamMeta.last_error}`);
 
     /**************************************************************
-     * 5) Elegir número ADS / NORMAL
+     * 5) Elegir número ADS / NORMAL (API result)
      **************************************************************/
     const adsList = Array.isArray(data?.ads?.whatsapp) ? data.ads.whatsapp : [];
     const normalList = Array.isArray(data?.whatsapp) ? data.whatsapp : [];
@@ -212,6 +280,7 @@ export default async function handler(req, res) {
      **************************************************************/
     LAST_GOOD_NUMBER = phone;
     LAST_GOOD_META = {
+      route: hasAllocation ? "api (allocation)" : "api",
       upstream_key: upstream.key,
       upstream_base: upstream.base,
       agency_id: agency.id,
@@ -222,21 +291,19 @@ export default async function handler(req, res) {
       upstream: upstreamMeta,
       ads_len: adsList.length,
       normal_len: normalList.length,
+      allocation: hasAllocation ? agency.allocation : null,
     };
 
     return res.status(200).json({
       number: phone,
       mode,
-
       upstream_key: upstream.key,
       upstream_base: upstream.base,
-
       agency_id: agency.id,
       agency_name: agency.name || "",
-
       chosen_from: chosenSource,
       only_ads: CONFIG.ONLY_ADS_WHATSAPP,
-
+      allocation: hasAllocation ? agency.allocation : null,
       ms: Date.now() - startedAt,
       upstream: upstreamMeta,
     });
