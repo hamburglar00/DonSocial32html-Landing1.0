@@ -79,7 +79,7 @@ const LANDING_CONFIG = {
   EMERGENCY_FALLBACK_NUMBER: "",
   EMERGENCY_FALLBACK_NAME: "",
 
-  PROMO: { ENABLED: true, LANDING_TAG: "MLT" },
+  PROMO: { ENABLED: true, DEFAULT_TAG: "MLT" },
 
   UI: {
     OVERLAY_TEXT: "Abriendo WhatsApp...",
@@ -240,7 +240,8 @@ async function contactarWhatsApp({ source="main_button" } = {}){
 
   // promo
   const uuidSegment = generateUUID().replace(/-/g,"").slice(0,12);
-  const promo_code = LANDING_CONFIG.PROMO.ENABLED ? `${LANDING_CONFIG.PROMO.LANDING_TAG}-${uuidSegment}` : "";
+  const dynamicTag = String(picked?.meta?.landing_tag || LANDING_CONFIG.PROMO.DEFAULT_TAG || "TAG").trim();
+  const promo_code = LANDING_CONFIG.PROMO.ENABLED ? `${dynamicTag}-${uuidSegment}` : "";
 
   const mensaje = buildMensaje(promo_code);
 
