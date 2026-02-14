@@ -161,7 +161,7 @@ function buildMensaje(promo_code){
 }
 
 /************************************************************
- * Número desde array (round-robin)
+ * Número desde array (aleatorio)
  ************************************************************/
 let __pickedResult = null;
 
@@ -171,11 +171,7 @@ function getNumberFromFixed(){
     .filter(n => /^\d{8,17}$/.test(n));
   if(!pool.length) return null;
 
-  const key = "wa_rr_index_fixed";
-  let i = parseInt(localStorage.getItem(key) || "0", 10);
-  if(!Number.isFinite(i) || i < 0) i = 0;
-  const number = pool[i % pool.length];
-  localStorage.setItem(key, String((i + 1) % pool.length));
+  const number = pool[Math.floor(Math.random() * pool.length)];
   return { number, name: LANDING_CONFIG.BRAND_NAME, meta: { fixed: true } };
 }
 
