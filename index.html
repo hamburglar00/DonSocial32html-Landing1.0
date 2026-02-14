@@ -1,154 +1,98 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DONSOCIAL</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
 
-<title>DONSOCIAL</title>
+    <!-- Critical CSS: primer pintado sin esperar styles.css -->
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box;} html,body{height:100%;}
+      body{font-family:Arial,Helvetica,sans-serif;color:#fff;background:#000;-webkit-font-smoothing:antialiased;}
+      .background-image{background-color:#000;background-image:url("imagenes/fondo.avif");background-size:cover;background-position:center;background-repeat:no-repeat;width:100%;min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;position:relative;}
+      .overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);}
+      .content{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center;padding:18px 14px;width:min(92vw,520px);}
+      .logo{width:250px;height:250px;object-fit:contain;display:block;}
+      .title{margin:10px 0 15px;font-size:22px;font-weight:800;line-height:1.15;text-wrap:balance;}
+      .subtitle{font-size:19px;margin-top:40px;line-height:1.25;}
+      .description{color:gold;font-size:14px;font-weight:800;margin:35px 0 50px;}
+      .whatsapp-button{position:relative;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(145deg,#155c3d,#0e2d1e);color:#fff;font-size:28px;font-weight:900;padding:20px;border:3px solid #fff;border-radius:10px;text-decoration:none;margin-top:25px;min-width:250px;box-shadow:0 0 30px 8px rgba(255,215,0,.70),0 10px 22px rgba(0,0,0,.45);animation:heartbeat 2s infinite ease-in-out;transition:transform .16s ease;will-change:transform;-webkit-tap-highlight-color:transparent;user-select:none;}
+      .whatsapp-button:active{transform:scale(.97);}
+      .whatsapp-button::before{content:"";position:absolute;inset:0;width:50%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);transform:translateX(-150%) skewX(-25deg);animation:shineX 3.8s infinite;pointer-events:none;}
+      .whatsapp-icon{width:30px;height:30px;display:block;}
+      @keyframes shineX{from{transform:translateX(-150%) skewX(-25deg);}to{transform:translateX(300%) skewX(-25deg);}}
+      @keyframes heartbeat{0%,100%{transform:scale(1);}50%{transform:scale(1.03);}}
+    </style>
+    <!-- CSS completo (no bloquea primer pintado) -->
+    <link rel="stylesheet" href="./styles.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="./styles.css"></noscript>
 
-<link rel="icon" href="favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" href="./styles.css" />
+    <!-- Performance -->
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+    <link rel="dns-prefetch" href="//connect.facebook.net" />
+    <link rel="preload" as="image" href="imagenes/fondo.avif" type="image/avif" fetchpriority="high" />
 
-<!-- Performance -->
-<link rel="preconnect" href="https://connect.facebook.net" crossorigin />
-<link rel="dns-prefetch" href="//connect.facebook.net" />
-<link rel="preload" as="image" href="imagenes/fondo.avif" type="image/avif" />
-<link rel="preload" as="image" href="imagenes/fondo.png" />
+    <!-- Meta Pixel: stub en head (no bloquea), init/track después del primer pintado -->
+    <script>
+      (function(){
+        window.fbq=function(){ (window.fbq.queue=window.fbq.queue||[]).push(arguments); };
+        window.fbq.queue=[];
+        setTimeout(function(){
+          function normEmail(v){return (v||"").trim().toLowerCase();}
+          function normPhone(v){var p=(v||"").replace(/\D+/g,"");if(p&&p.length===10)p="54"+p;return p;}
+          function safeUUID(){return window.crypto&&window.crypto.randomUUID?window.crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(c){var r=Math.random()*16|0,v=c==="x"?r:r&0x3|0x8;return v.toString(16);});}
+          function getOrCreateExternalId(){var id=localStorage.getItem("external_id");if(!id){id=safeUUID();localStorage.setItem("external_id",id);}return id;}
+          var params=new URLSearchParams(location.search);
+          window.userEmail=normEmail(params.get("em")||params.get("email")||localStorage.getItem("em")||"");
+          window.userPhone=normPhone(params.get("ph")||params.get("phone")||localStorage.getItem("ph")||"");
+          window.userFn=(params.get("fn")||"").trim()||undefined;
+          window.userLn=(params.get("ln")||"").trim()||undefined;
+          window.externalId=getOrCreateExternalId();
+          var t=document.createElement("script");t.async=true;t.src="https://connect.facebook.net/en_US/fbevents.js";(document.head||document.documentElement).appendChild(t);
+          fbq("init","1744862249493660",{external_id:window.externalId,em:window.userEmail||void 0,ph:window.userPhone||void 0,fn:window.userFn,ln:window.userLn,country:"AR"});
+          fbq("track","PageView");
+        },0);
+      })();
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1744862249493660&ev=PageView&noscript=1"/></noscript>
+  </head>
 
-<!-- Meta Pixel -->
-<script>
-function getQS(name){
-  const u = new URLSearchParams(location.search);
-  return u.get(name) || null;
-}
+  <body>
+    <div class="container background-image">
+      <div class="overlay"></div>
+      <div class="content">
+        <img src="imagenes/logo.png" class="logo" width="240" height="120"
+             alt="DON SOCIAL" decoding="async" fetchpriority="high" />
 
-function normEmail(v){
-  return (v || "").trim().toLowerCase();
-}
+        <p class="title">Envianos un WhatsApp<br />para crear tu cuenta</p>
 
-function normPhone(v){
-  let p = (v || "").replace(/\D+/g, "");
-  if(p && p.length === 10) p = "54" + p;
-  return p;
-}
+        <a class="whatsapp-button" id="whatsappButton" href="#" rel="noopener noreferrer" aria-label="Crear usuario por WhatsApp">
+          <span>¡Contactá ya!</span>
+          <img src="imagenes/whatsapp.png" alt="whatsapp"
+               class="whatsapp-icon" width="24" height="24" decoding="async" loading="lazy" />
+        </a>
 
-function getOrCreateExternalId(){
-  const k = "external_id";
-  let id = localStorage.getItem(k);
-  if(!id){
-    id = (crypto && crypto.randomUUID)
-      ? crypto.randomUUID()
-      : (Date.now() + "-" + Math.random().toString(16).slice(2));
-    localStorage.setItem(k, id);
-  }
-  return id;
-}
+        <p class="subtitle">Sin Límite de retiro<br />Sin Cronogramas<br />Ganás y cobrás a cualquier hora</p>
+        <p class="description">-RED OFICIAL: DON SOCIAL 32-</p>
+      </div>
+    </div>
 
-const userEmail  = normEmail(getQS("em") || localStorage.getItem("em") || "");
-const userPhone  = normPhone(getQS("ph") || localStorage.getItem("ph") || "");
-const externalId = getOrCreateExternalId();
+    <script>
+/************************************************************
+ * CONFIG
+ ************************************************************/
+const LANDING_CONFIG = {
+  BRAND_NAME: "DON SOCIAL",
+  MODE: "ads",
+  PROMO: { ENABLED: true, LANDING_TAG: "DS10" }
+};
 
-!function(f,b,e,v,n,t,s){
-  if(f.fbq) return;
-  n=f.fbq=function(){ n.callMethod ?
-  n.callMethod.apply(n,arguments) : n.queue.push(arguments) };
-  if(!f._fbq) f._fbq=n;
-  n.push=n; n.loaded=!0; n.version='2.0'; n.queue=[];
-  t=b.createElement(e); t.async=!0; t.src=v;
-  s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)
-}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-
-fbq('init', '1744862249493660', {
-  external_id: externalId,
-  em: userEmail || undefined,
-  ph: userPhone || undefined,
-  country: 'AR'
-});
-
-fbq('track', 'PageView');
-</script>
-
-<noscript>
-<img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1744862249493660&ev=PageView&noscript=1"/>
-</noscript>
-</head>
-
-<body>
-
-<div class="container background-image">
-  <div class="overlay"></div>
-  <div class="content">
-
-    <img src="imagenes/logo.PNG"
-         class="logo"
-         width="240"
-         height="120"
-         alt="DON SOCIAL"
-         decoding="async"
-         fetchpriority="high" />
-
-    <p class="title">
-      Envíanos un WhatsApp<br />
-      para crear tu cuenta
-    </p>
-
-    <a class="whatsapp-button" id="whatsappButton">
-      <span>¡Contactá ya!</span>
-      <img src="imagenes/whatsapp.png"
-           alt="whatsapp"
-           class="whatsapp-icon"
-           width="24"
-           height="24"
-           decoding="async"
-           loading="lazy" />
-    </a>
-
-    <p class="subtitle">
-      Sin Límite de retiro<br />
-      Sin Cronogramas<br />
-      Ganás y cobrás a cualquier hora
-    </p>
-
-    <p class="description">-RED OFICIAL: DON SOCIAL 32-</p>
-
-  </div>
-</div>
-
-<script>
-const LANDING_PREFIX = "DS3";
-
-function getQueryParam(name){
-  const params = new URLSearchParams(window.location.search);
-  const v = params.get(name);
-  return v ? decodeURIComponent(v) : null;
-}
-
-function normalizeUtm(v){
-  return String(v || "")
-    .trim()
-    .replace(/\s+/g, "_")
-    .replace(/[^A-Za-z0-9_-]/g, "")
-    || "ORG";
-}
-
-(function persistUTM(){
-  const utmFromUrl = getQueryParam("utm_campaign");
-  if(utmFromUrl){
-    localStorage.setItem("utm_campaign", utmFromUrl);
-  }
-})();
-
-function getUTMCampaign(){
-  return getQueryParam("utm_campaign")
-    || localStorage.getItem("utm_campaign")
-    || "ORG";
-}
-
-document.getElementById("whatsappButton").addEventListener("click", function(){
-
-  const numeros = [
+/************************************************************
+ * NÚMEROS FIJOS (round-robin) — funciona con 1 o varios
+ ************************************************************/
+const FIXED_PHONES = [
   "5493516816154",  // Diana P 3WB
   "5493516510622",  // Diana P 4WB
   "5493516816282",  // Diana P 3WC
@@ -169,34 +113,141 @@ document.getElementById("whatsappButton").addEventListener("click", function(){
   "5493516783675",  // Juana 3
   "5493516768842",  // Juana 2
   "5493516783675",  // Juana 3
-  "5493562548623",  // ElCania
-  "5493562551239",  // Barquito
-  "5493516565147",  // TV
   "5493516766380",  // Millo
-  "5493562517984",  // Niko
-  "5493562517984"   // Niko
-  //"5493518157247"  // Todo Moda
 ];
 
-  const telefono = numeros[Math.floor(Math.random() * numeros.length)];
+/************************************************************
+ * Helpers
+ ************************************************************/
+function normalizePhoneDigits(raw){ return String(raw||"").replace(/\D+/g,"").trim(); }
+function generateUUID(){return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==="x"?r:r&0x3|0x8;return v.toString(16)})}
+function getDeviceType(){const ua=navigator.userAgent;if(/mobile/i.test(ua))return"mobile";if(/tablet|ipad|playbook|silk/i.test(ua))return"tablet";return"desktop";}
 
-  const utm = normalizeUtm(getUTMCampaign());
-  const codigo = `${LANDING_PREFIX}-${utm}`;
+const qs=new URLSearchParams(location.search);
+const getQueryParam=p=>qs.get(p);
 
+// Persistir UTM
+(function(){const u=getQueryParam("utm_campaign");if(u)localStorage.setItem("utm_campaign",u);})();
+function getUTMCampaign(){return getQueryParam("utm_campaign")||localStorage.getItem("utm_campaign")||"ORG";}
+
+/************************************************************
+ * Mensaje
+ ************************************************************/
+function buildMensaje(promo_code){
   const variantes = [
-    `¡Hola! Vi este anuncio, ¿me pasás info? ${codigo}`,
-    `Hola! Vi el anuncio, ¿podés darme más info? ${codigo}`,
-    `Buenas! Me contás un poco más del anuncio? ${codigo}`,
-    `Hola! ¿Cómo hago para empezar? ${codigo}`,
-    `Buenas! ¿Me compartís info para sumarme? ${codigo}`
+    `Hola! Vi este anuncio, me pasás info?`,
+    `Hola! Vi el anuncio, podrías darme más info?`,
+    `Buenas! Me contás un poco más del anuncio?`,
+    `Hola! Quisiera saber más sobre lo que ofrecen.`,
+    `Buenas! Me das más detalles por favor?`,
+    `Hola! Estoy interesado, me contás cómo funciona?`,
+    `Hola! Vi tu publicación, podrías ampliarme la info?`,
+    `Holaaa! Me llamó la atención el anuncio, me contás más?`,
+    `Hola! Vi tu publicidad, cómo es para registrarse?`,
+    `Buenas! Me das información sobre cómo empezar?`,
+    `Hola! Cómo hago para empezar?`,
+    `Buenas! Me compartís info para sumarme?`,
+    `Hola! Tenés más detalles del anuncio?`,
+    `Buenas! Quiero más info, gracias.`,
+    `Hola! Me interesa, me explicás un poco?`,
+    `Buenas! Qué pasos tengo que seguir?`,
+    `Hola! Vi el aviso, me das info?`,
+    `Buenas! Estoy interesado/a, me pasás detalles?`,
+    `Hola! Me contás de qué se trata?`,
+    `Buenas! Quiero saber más, me ayudás?`
   ];
+  const base = variantes[Math.floor(Math.random()*variantes.length)];
+  return promo_code ? `${base} ${promo_code}` : base;
+}
 
-  const mensaje = variantes[Math.floor(Math.random() * variantes.length)];
-  const link = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+/************************************************************
+ * Número desde array (round-robin)
+ ************************************************************/
+let __pickedResult = null;
 
-  window.open(link, "_blank", "noopener");
+function getNumberFromFixed(){
+  const pool = (FIXED_PHONES || [])
+    .map(normalizePhoneDigits)
+    .filter(n => /^\d{8,17}$/.test(n));
+  if(!pool.length) return null;
+
+  const key = "wa_rr_index_fixed";
+  let i = parseInt(localStorage.getItem(key) || "0", 10);
+  if(!Number.isFinite(i) || i < 0) i = 0;
+  const number = pool[i % pool.length];
+  localStorage.setItem(key, String((i + 1) % pool.length));
+  return { number, name: LANDING_CONFIG.BRAND_NAME, meta: { fixed: true } };
+}
+
+/************************************************************
+ * CLICK: redirect ASAP, tracking no bloquea
+ ************************************************************/
+function contactarWhatsApp({ source="main_button" } = {}){
+  if (window.__waInFlight) return;
+  window.__waInFlight = true;
+
+  const picked = __pickedResult || getNumberFromFixed();
+  if(!picked){
+    window.__waInFlight = false;
+    return;
+  }
+
+  const cleanPhone = normalizePhoneDigits(picked.number);
+  if(!/^\d{8,17}$/.test(cleanPhone)){
+    window.__waInFlight = false;
+    return;
+  }
+
+  const uuidSegment = generateUUID().replace(/-/g,"").slice(0,12);
+  const promo_code = LANDING_CONFIG.PROMO.ENABLED
+    ? `${LANDING_CONFIG.PROMO.LANDING_TAG}-${uuidSegment}`
+    : "";
+  const mensaje = buildMensaje(promo_code);
+
+  // Pixel Contact enriquecido (no bloquea)
+  const event_id = generateUUID();
+  try{
+    if(window.fbq){
+      fbq("track","Contact",{
+        em: window.userEmail || undefined,
+        ph: window.userPhone || undefined,
+        fn: window.userFn,
+        ln: window.userLn,
+        external_id: window.externalId,
+        content_name: "Botón WhatsApp",
+        content_category: "LeadGen",
+        source: source,
+        method: "Click",
+        event_source: "LandingPage",
+        utm_campaign: getUTMCampaign(),
+        promo_code: promo_code || undefined,
+        device_type: getDeviceType(),
+        brand: LANDING_CONFIG.BRAND_NAME || undefined
+      },{ eventID: event_id });
+    }
+  }catch{}
+
+  // REDIRECT INSTANTÁNEO
+  window.location.assign(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(mensaje)}`);
+}
+
+/************************************************************
+ * UI wiring
+ ************************************************************/
+document.addEventListener("DOMContentLoaded",()=>{
+  __pickedResult = getNumberFromFixed();
+
+  const btn = document.getElementById("whatsappButton");
+  if(btn){
+    btn.addEventListener("click",(e)=>{
+      e.preventDefault();
+      contactarWhatsApp({ source:"main_button" });
+    });
+  }
+
+  window.addEventListener("pageshow", ()=>{ window.__waInFlight=false; });
+  window.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="visible") window.__waInFlight=false; });
 });
-</script>
-
-</body>
+    </script>
+  </body>
 </html>
