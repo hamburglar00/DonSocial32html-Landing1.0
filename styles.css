@@ -1,40 +1,35 @@
-* {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #fff;
-}
+/* ==========================
+   Reset liviano y base
+   ========================== */
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
 
 body {
-  background-color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+  background-color: #000;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-h1 {
-  padding: 20px;
-}
-
+/* ==========================
+   Fondo / Hero
+   ========================== */
 .background-image {
-  /* fallback (por si algún navegador no soporta avif) */
-  background-image: url("imagenes/fondo.png");
+  background-color: #000;
+  background-image: url("imagenes/fondo.avif");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-  background-size: auto 100%;
-  background-repeat: repeat-x;
-  background-position: top center;
   width: 100%;
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
 }
-
-/* Si soporta AVIF, usa el .avif */
-@supports (background-image: url("imagenes/fondo.avif")) {
-  .background-image {
-    background-image: url("imagenes/fondo.avif");
-  }
-}
-
 
 .overlay {
   position: absolute;
@@ -48,102 +43,147 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 18px 14px;
+  width: min(92vw, 520px);
 }
 
+/* ==========================
+   Logo
+   ========================== */
 .logo {
   width: 250px;
   height: 250px;
+  object-fit: contain;
+  display: block;
 }
 
+/* ==========================
+   Tipografías
+   ========================== */
 .title {
-  margin-top: 10px;
-  margin-bottom: 15px;
-  color: white;
+  margin: 10px 0 15px;
   font-size: 22px;
-  font-weight: bold;
+  font-weight: 800;
+  line-height: 1.15;
+  text-wrap: balance;
 }
 
+.subtitle {
+  font-size: 19px;
+  margin-top: 40px;
+  line-height: 1.25;
+}
+
+.description {
+  color: gold;
+  font-size: 14px;
+  font-weight: 800;
+  margin: 35px 0 50px;
+  letter-spacing: .2px;
+}
+
+/* ==========================
+   Botón WhatsApp
+   ========================== */
 .whatsapp-button {
   position: relative;
   overflow: hidden;
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  background: linear-gradient(145deg, #155c3d, #0e2d1e); /* efecto lata */
-  color: white;
+  justify-content: center;
+  gap: 10px;
+
+  background: linear-gradient(145deg, #155c3d, #0e2d1e);
+  color: #fff;
   font-size: 28px;
-  font-weight: bold;
+  font-weight: 900;
+
   padding: 20px;
-  border: solid 3px #fff;
+  border: 3px solid #fff;
   border-radius: 10px;
   text-decoration: none;
+
   margin-top: 25px;
-  gap: 10px;
   min-width: 250px;
+
+  /* Sombra estática (no se anima) */
   box-shadow:
-    0 0 30px 8px gold,
-    inset 0 1px 0 #ffffff33,
-    0 0 12px 2px #10392899;
+    0 0 30px 8px rgba(255, 215, 0, .70),
+    0 10px 22px rgba(0, 0, 0, .45);
+
   animation: heartbeat 2s infinite ease-in-out;
-  transition: all 0.3s ease-in-out;
+  transition: transform .16s ease;
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Feedback visual al tocar */
+.whatsapp-button:active {
+  transform: scale(.97);
+}
+
+.whatsapp-button:focus-visible {
+  outline: 3px solid rgba(255, 215, 0, .85);
+  outline-offset: 3px;
 }
 
 /* Brillo animado */
 .whatsapp-button::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: -75%;
+  inset: 0;
   width: 50%;
-  height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
-  transform: skewX(-25deg);
-  animation: shine 3s infinite;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+  transform: translateX(-150%) skewX(-25deg);
+  animation: shineX 3.8s infinite;
   pointer-events: none;
 }
 
-@keyframes shine {
-  0% {
-    left: -75%;
-  }
-  100% {
-    left: 125%;
-  }
+@keyframes shineX {
+  from { transform: translateX(-150%) skewX(-25deg); }
+  to   { transform: translateX(300%) skewX(-25deg); }
 }
 
+/* Heartbeat: solo transform (eficiente, sin animar box-shadow) */
 @keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow:
-      0 0 30px 8px gold,
-      inset 0 1px 0 #ffffff33,
-      0 0 12px 2px #10392899;
-  }
-  50% {
-    transform: scale(1.03);
-    box-shadow:
-      0 0 45px 12px gold,
-      inset 0 1px 0 #ffffff66,
-      0 0 18px 4px #155c3d;
-  }
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.03); }
 }
 
 .whatsapp-icon {
+  width: 30px;
   height: 30px;
+  display: block;
 }
 
-.subtitle {
-  font-size: 19px;
-  margin-top: 40px;
-  color: white;
+/* ==========================
+   Motion reducido
+   ========================== */
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-button,
+  .whatsapp-button::before { animation: none !important; }
+  .whatsapp-button { transition: none; }
 }
 
-.description {
-  color: gold;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: bold;
-  margin-top: 35px;
-  margin-bottom: 50px;
+/* ==========================
+   Responsive
+   ========================== */
+@media (min-width: 480px) {
+  .logo { width: 260px; height: 260px; }
+  .title { font-size: 23px; }
+  .subtitle { font-size: 20px; }
+}
+
+@media (min-width: 768px) {
+  .logo { width: 280px; height: 280px; }
+  .title { font-size: 24px; }
+  .whatsapp-button { font-size: 30px; min-width: 280px; }
+}
+
+@media (min-width: 1024px) {
+  .content { padding: 22px 16px; }
+  .logo { width: 300px; height: 300px; }
+  .whatsapp-button { min-width: 300px; }
 }
