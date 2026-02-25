@@ -52,20 +52,20 @@
        ************************************************************/
       const PIXEL_ID = "1744862249493660";
       const BRAND_NAME = "DON SOCIAL";
-      const PROMO_ENABLED = true;
-      const PROMO_TAG = "DS10";
 
       /************************************************************
        * Helpers
        ************************************************************/
       function normEmail(v){ return (v||"").trim().toLowerCase() || undefined; }
 
-      // Para AR: si mandan 10 dígitos, prefija 54. Si ya viene con 54, respeta.
+      // AR robusto (conservador): respeta si ya viene con 54, limpia 0/15, agrega 54 si quedan 10 dígitos.
       function normPhone(v){
-        let p = String(v||"").replace(/\D+/g,"");
-        if(!p) return undefined;
-        if(p.length === 10) p = "54" + p;
-        return p;
+        let d = String(v||"").replace(/\D+/g,"");
+        if(!d) return undefined;
+        if(d.startsWith("54")) return d;
+        d = d.replace(/^0+/, "").replace(/^15/, "");
+        if(d.length === 10) return "54" + d;
+        return d;
       }
 
       function safeUUID(){
@@ -114,16 +114,15 @@
       const userLn = (q("ln")||"").trim() || undefined;
       const externalId = getOrCreateExternalId();
 
-      // Persistir em/ph si llegaron por querystring (opcional, ayuda matching en siguientes visitas)
+      // Persistir em/ph si llegaron por querystring
       try{
         if(q("em") || q("email")) localStorage.setItem("em", userEmail || "");
         if(q("ph") || q("phone")) localStorage.setItem("ph", userPhone || "");
       }catch{}
 
       /************************************************************
-       * Init Pixel + PageView (lo antes posible)
+       * Init Pixel + PageView
        ************************************************************/
-      // Init con advanced matching (mejor práctica)
       fbq("init", PIXEL_ID, {
         em: userEmail,
         ph: userPhone,
@@ -133,7 +132,6 @@
         country: "AR"
       });
 
-      // Set userData (si está disponible, no rompe si no)
       try{
         fbq("set", "userData", {
           em: userEmail,
@@ -144,14 +142,13 @@
         });
       }catch{}
 
-      // PageView
       fbq("track", "PageView");
 
       /************************************************************
        * Export para el click handler
        ************************************************************/
       window.__META = {
-        PIXEL_ID, BRAND_NAME, PROMO_ENABLED, PROMO_TAG,
+        PIXEL_ID, BRAND_NAME,
         userEmail, userPhone, userFn, userLn, externalId,
         safeUUID, getDeviceType, getUTMCampaign
       };
@@ -180,7 +177,7 @@
       <a class="whatsapp-button" id="whatsappButton" href="#" aria-label="Crear usuario por WhatsApp">
         <span>¡Contactá ya!</span>
         <img src="imagenes/whatsapp.png" alt="whatsapp"
-             class="whatsapp-icon" width="30" height="30" decoding="async" loading="lazy" />
+             class="whatsapp-icon" width="30" height="30" decoding="async" />
       </a>
 
       <p class="subtitle">Sin Límite de retiro<br />Sin Cronogramas<br />Ganás y cobrás a cualquier hora</p>
@@ -189,6 +186,14 @@
   </div>
 
   <script>
+    /************************************************************
+     * CONFIG 1.0
+     ************************************************************/
+    const LANDING_CONFIG = {
+      BRAND_NAME: "DON SOCIAL",
+      PROMO: { ENABLED: true, LANDING_TAG: "DS10" }
+    };
+
     /************************************************************
      * NÚMEROS FIJOS (aleatorio)
      ************************************************************/
@@ -241,21 +246,32 @@
 
       const M = window.__META || {};
       const uuid12 = (M.safeUUID ? M.safeUUID() : (Date.now()+""+Math.random())).replace(/-/g,"").slice(0,12);
-      const promo_code = (M.PROMO_ENABLED) ? `${M.PROMO_TAG}-${uuid12}` : "";
+      const promo_code = (LANDING_CONFIG.PROMO && LANDING_CONFIG.PROMO.ENABLED)
+        ? `${LANDING_CONFIG.PROMO.LANDING_TAG}-${uuid12}`
+        : "";
+
       const mensaje = buildMensaje(promo_code);
 
       const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(mensaje)}`;
-      const go = () => window.location.assign(waUrl);
-
       let done = false;
-      const goOnce = () => { if(!done){ done=true; go(); } };
+      const goOnce = () => { if(!done){ done=true; window.location.assign(waUrl); } };
 
-      // Track Contact de forma "best effort" sin frenar WhatsApp
       const event_id = (M.safeUUID ? M.safeUUID() : ("evt_"+Date.now()+"_"+Math.random()));
 
       try{
         if(window.fbq){
-          fbq("track", "Contact", {
+          // (1) Re-set userData justo antes del evento (mejor práctica)
+          try{
+            fbq("set","userData",{
+              em: M.userEmail || undefined,
+              ph: M.userPhone || undefined,
+              fn: M.userFn,
+              ln: M.userLn,
+              external_id: M.externalId
+            });
+          }catch{}
+
+          fbq("track","Contact",{
             content_name: "Botón WhatsApp",
             content_category: "LeadGen",
             source: source,
@@ -264,8 +280,8 @@
             utm_campaign: (M.getUTMCampaign ? M.getUTMCampaign() : "ORG"),
             promo_code: promo_code || undefined,
             device_type: (M.getDeviceType ? M.getDeviceType() : undefined),
-            brand: M.BRAND_NAME || undefined
-          }, {
+            brand: (LANDING_CONFIG.BRAND_NAME || M.BRAND_NAME) || undefined
+          },{
             eventID: event_id,
             eventCallback: goOnce
           });
@@ -276,7 +292,6 @@
         }
       }catch{}
 
-      // Si no hay Pixel, redirigí igual
       goOnce();
     }
 
@@ -291,7 +306,6 @@
         }, { passive:false });
       }
 
-      // Reset in-flight cuando el usuario vuelve (iOS/Safari friendly)
       window.addEventListener("pageshow", ()=>{ __waInFlight=false; });
       window.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="visible") __waInFlight=false; });
     });
