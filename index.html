@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -18,8 +18,8 @@
     }
     .container {
       max-width: 500px;
-      margin: 40px auto;
-      padding: 40px 20px;
+      margin: 24px auto;
+      padding: 28px 18px;
       background-image: url('fondo4_historia_instagram.avif');
       background-size: cover;
       background-position: center;
@@ -41,18 +41,19 @@
       text-shadow:0 0 6px rgba(0,0,0,0.7);margin-top:6px;
     }
     .contact-desc {
-      font-size:1.1em;color:#ffffff;font-weight:500;
-      text-shadow:0 0 4px rgba(0,0,0,0.6);margin:2px 0;
+      font-size:0.95em;color:#ffffff;font-weight:500;
+      text-shadow:0 0 4px rgba(0,0,0,0.6);margin:6px 0 4px;line-height:1.45;
     }
     .cta-button {
       background:linear-gradient(90deg,#25d366,#128c7e);
-      color:white;padding:20px 35px;border:none;border-radius:10px;
-      font-size:1em;font-weight:700;cursor:pointer;text-decoration:none;
-      display:inline-flex;align-items:center;justify-content:center;gap:10px;margin-top:14px;animation:heartbeat 1.5s infinite;
+      color:white;padding:18px 18px;border:none;border-radius:10px;
+      font-size:0.95em;font-weight:700;line-height:1.25;cursor:pointer;text-decoration:none;
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:420px;box-sizing:border-box;margin-top:16px;animation:heartbeat 1.5s infinite;
       box-shadow:0 0 15px #25d36680;transition:transform 0.2s ease;
     }
     .cta-button:hover {background:linear-gradient(90deg,#1ebe5d,#0c6f58);transform:scale(1.03);}
-    .cta-button img {width:22px;height:22px;display:block;}
+    .cta-button span {flex:1;text-align:center;}
+    .cta-button img {width:24px;height:24px;display:block;flex:0 0 auto;}
     @keyframes heartbeat {0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
     .testimonials {margin-top:22px;font-size:0.9em;text-align:left;position:relative;cursor:pointer;}
     .testimonial {
@@ -69,6 +70,21 @@
       margin-top:8px;transition:width 5s linear;
     }
     @keyframes fadeInBubble {from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+    @media (max-width: 420px) {
+      .container {
+        width: calc(100% - 24px);
+        margin: 18px auto;
+        padding: 26px 16px;
+        border-radius: 14px;
+      }
+      .profile-pic {width:180px;margin-bottom:4px;}
+      .contact-name {font-size:1.32em;margin-top:4px;line-height:1.15;}
+      .contact-desc {font-size:0.9em;line-height:1.4;margin-top:8px;}
+      .cta-button {padding:16px 16px;font-size:0.88em;gap:8px;}
+      .cta-button img {width:22px;height:22px;}
+      .testimonials {margin-top:20px;}
+      .testimonial {max-width:100%;box-sizing:border-box;font-size:0.9em;line-height:1.45;}
+    }
   </style>
 
 <!-- Meta Pixel Code -->
@@ -141,7 +157,7 @@ src="https://www.facebook.com/tr?id=2823620631177161&ev=PageView&noscript=1"
     <div class="contact-name"> DIVERTITE AHORA MISMO</div>
     <div class="contact-desc">Envianos un mensaje tocando el boton de abajo<br />y reclama tu regalo de bienvenida</div>
 
-    <a class="cta-button" href="javascript:void(0);" onclick="goToWhatsApp()">PEDIR MI USUARIO GRATIS AHORA <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" /></a>
+    <a class="cta-button" href="javascript:void(0);" onclick="goToWhatsApp()"><span>PEDIR MI USUARIO GRATIS AHORA</span><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" /></a>
 
     <div class="testimonials" onclick="goToWhatsApp()">
       <div class="testimonial" id="testimonial-text"></div>
@@ -150,6 +166,7 @@ src="https://www.facebook.com/tr?id=2823620631177161&ev=PageView&noscript=1"
   </div>
 </body>
 </html>
+
 
 
 
