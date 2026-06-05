@@ -48,10 +48,11 @@
       background:linear-gradient(90deg,#25d366,#128c7e);
       color:white;padding:20px 35px;border:none;border-radius:10px;
       font-size:1em;font-weight:700;cursor:pointer;text-decoration:none;
-      display:inline-block;margin-top:14px;animation:heartbeat 1.5s infinite;
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;margin-top:14px;animation:heartbeat 1.5s infinite;
       box-shadow:0 0 15px #25d36680;transition:transform 0.2s ease;
     }
     .cta-button:hover {background:linear-gradient(90deg,#1ebe5d,#0c6f58);transform:scale(1.03);}
+    .cta-button img {width:22px;height:22px;display:block;}
     @keyframes heartbeat {0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
     .testimonials {margin-top:22px;font-size:0.9em;text-align:left;position:relative;cursor:pointer;}
     .testimonial {
@@ -138,10 +139,9 @@ src="https://www.facebook.com/tr?id=2823620631177161&ev=PageView&noscript=1"
     </a>
 
     <div class="contact-name"> DIVERTITE AHORA MISMO</div>
-    <div class="contact-desc">REGALO DE BIENVENIDA (CON CARGA)</div>
-    <div class="contact-desc"></div>
+    <div class="contact-desc">Envianos un mensaje tocando el boton de abajo<br />y reclama tu regalo de bienvenida</div>
 
-    <a class="cta-button" href="javascript:void(0);" onclick="goToWhatsApp()">PEDIR MI USUARIO GRATIS AHORA</a>
+    <a class="cta-button" href="javascript:void(0);" onclick="goToWhatsApp()">PEDIR MI USUARIO GRATIS AHORA <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" /></a>
 
     <div class="testimonials" onclick="goToWhatsApp()">
       <div class="testimonial" id="testimonial-text"></div>
@@ -150,6 +150,7 @@ src="https://www.facebook.com/tr?id=2823620631177161&ev=PageView&noscript=1"
   </div>
 </body>
 </html>
+
 
 
 
