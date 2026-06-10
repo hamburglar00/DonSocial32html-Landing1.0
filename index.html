@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -120,10 +120,19 @@ src="https://www.facebook.com/tr?id=1362224885777235&ev=PageView&noscript=1"
       "5493513875650", //JuliCun
       "5493562569882"  //ElCania
     ];
+    function getWhatsAppMessage(){
+      const utmCampaign = new URLSearchParams(window.location.search).get('utm_campaign');
+      const baseMessage = 'Hola! quiero más informacion por favor!';
+      const message = utmCampaign
+        ? `${baseMessage} codigo: ${utmCampaign}. mi nombre es:`
+        : `${baseMessage} mi nombre es:`;
+      return encodeURIComponent(message);
+    }
+
     function goToWhatsApp(){
       const whatsappNumber = whatsappNumbers[Math.floor(Math.random() * whatsappNumbers.length)];
       fbq('track','Contact');
-      window.location.href=`https://wa.me/${whatsappNumber}?text=Hola!%20quiero%20m%C3%A1s%20informacion%20por%20favor!%20mi%20nombre%20es:`;
+      window.location.href=`https://wa.me/${whatsappNumber}?text=${getWhatsAppMessage()}`;
     }
 
     const testimonios=[
@@ -174,6 +183,8 @@ src="https://www.facebook.com/tr?id=1362224885777235&ev=PageView&noscript=1"
   </div>
 </body>
 </html>
+
+
 
 
 
