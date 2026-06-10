@@ -124,8 +124,8 @@ src="https://www.facebook.com/tr?id=1362224885777235&ev=PageView&noscript=1"
       const utmCampaign = new URLSearchParams(window.location.search).get('utm_campaign');
       const baseMessage = 'Hola! quiero más informacion por favor!';
       const message = utmCampaign
-        ? `${baseMessage} codigo: ${utmCampaign}. mi nombre es:`
-        : `${baseMessage} mi nombre es:`;
+        ? `${baseMessage} Mi código es: ${utmCampaign} y mi nombre es:`
+        : `${baseMessage} Mi nombre es:`;
       return encodeURIComponent(message);
     }
 
@@ -183,6 +183,8 @@ src="https://www.facebook.com/tr?id=1362224885777235&ev=PageView&noscript=1"
   </div>
 </body>
 </html>
+
+
 
 
 
